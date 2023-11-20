@@ -24,28 +24,34 @@ class Program
 
     static void HomePage()
     {
-        int a = InteractiveInput(
+        bool loop = true;
+        do
+        {
+            int a = InteractiveInput(
             "PhoneBook \n \nWhat would you like to do?",
             new string[] { "View All Contacts", "Find contact", "Add Contact", "Delete Contact", "Delete All", "Quit" });
-        switch (a)
-        {
-            case 0:
-                ViewAllContactsPage();
-                break;
-            case 1:
-                FindContactPage();
-                break;
-            case 2:
-                AddContactPage();
-                break;
-            case 3:
-                DeleteContactPage();
-                break;
-            case 4:
-                DeleteAllPage();
-                break;
-
-        }
+            switch (a)
+            {
+                case 0:
+                    ViewAllContactsPage();
+                    break;
+                case 1:
+                    FindContactPage();
+                    break;
+                case 2:
+                    AddContactPage();
+                    break;
+                case 3:
+                    DeleteContactPage();
+                    break;
+                case 4:
+                    DeleteAllPage();
+                    break;
+                default:
+                    loop = false;
+                    break;
+            }
+        } while (loop);
     }
     static void DeleteAllPage()
     {
@@ -71,7 +77,6 @@ class Program
             ACout("No contacts to delete!");
         }
         Pause();
-        HomePage();
     }
 
     public static void ViewAllContactsPage()
@@ -94,7 +99,6 @@ class Program
         }
 
         Pause();
-        HomePage();
     }
 
     public static void AddContactPage()
@@ -129,7 +133,6 @@ class Program
         Console.WriteLine("Added sucessfully!");
 
         Pause();
-        HomePage();
     }
 
     public static void FindContactPage()
@@ -164,18 +167,16 @@ class Program
         }
         Thread.Sleep(300);
         Pause();
-        HomePage();
     }
 
     public static void DeleteContactPage()
     {
         ClearScreen();
         Console.Write("Delete a contact\n\n");
-        string name = "";
+        string name = GetLine("Enter name: ");
         List<Contact> contactsFound = new();
         List<int> indexes = new();
         int index = 0;
-        name = GetLine("Enter name: ");
         var allContacts = RetrieveData(connection);
 
         foreach (Contact c in allContacts)
@@ -238,7 +239,6 @@ class Program
         }
 
         Console.ReadKey();
-        HomePage();
     }
 
 
