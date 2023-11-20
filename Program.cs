@@ -29,7 +29,7 @@ class Program
         {
             int a = InteractiveInput(
             "PhoneBook \n \nWhat would you like to do?",
-            new string[] { "View All Contacts", "Find contact", "Add Contact", "Delete Contact", "Delete All", "Quit" });
+            new string[] { "View All Contacts", "Find contact", "Add Contact", "Archive a Contact", "Archive All", "Quit" });
             switch (a)
             {
                 case 0:
@@ -42,7 +42,7 @@ class Program
                     AddContactPage();
                     break;
                 case 3:
-                    DeleteContactPage();
+                    ArchiveContactPage();
                     break;
                 case 4:
                     DeleteAllPage();
@@ -170,10 +170,10 @@ class Program
         Pause();
     }
 
-    public static void DeleteContactPage()
+    public static void ArchiveContactPage()
     {
         ClearScreen();
-        Console.Write("Delete a contact\n\n");
+        Console.Write("Archive a contact\n\n");
         string name = GetLine("Enter name: ");
         List<Contact> contactsFound = new();
         List<int> indexes = new();
@@ -197,12 +197,12 @@ class Program
                 Contact n = contactsFound[0];
                 Console.WriteLine(n);
                 int res = InteractiveInput(
-                    "Are you sure you want to delete \n\n" + n,
-                    new string[] { "Back", "Delete" });
+                    "Are you sure you want to archive? \n\n" + n,
+                    new string[] { "Back", "Archive" });
                 if (res == 1)
                 {
                     allContacts.RemoveAt(indexes.First());
-                    ACout("Contact deleted!");
+                    ACout("Contact archived!");
                 }
             }
             else
@@ -213,7 +213,7 @@ class Program
                     choices.Add(c.ToString());
                 }
 
-                int res = InteractiveInput("Select contact to delete: ", choices.ToArray());
+                int res = InteractiveInput("Select contact to archived: ", choices.ToArray());
                 switch (res)
                 {
                     case 0:
@@ -222,13 +222,13 @@ class Program
                         Contact n = contactsFound[res - 1];
                         Console.Write(n);
                         int res1 = InteractiveInput(
-                            "Are you sure you want to delete \n\n" + n, new string[]
-                            {"Back", "Delete"});
+                            "Are you sure you want to archive? \n\n" + n, new string[]
+                            {"Back", "Archive"});
                         if (res1 == 1)
                         {
                             allContacts.RemoveAt(res);
                             Console.WriteLine();
-                            ACout("Contact deleted!");
+                            ACout("Contact Archived!");
                         }
                         break;
                 }
