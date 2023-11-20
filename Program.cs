@@ -1,18 +1,20 @@
-﻿
-namespace DBMS_Phonebook;
+﻿namespace DBMS_Phonebook;
 using static FileSave;
 using static Utils;
+using MySql.Data.MySqlClient;
+
+
 class Program
 {
+    public const string connectionString = "server=localhost;port=3306;uid=root;pwd=password123;database=phonebook;";
+    static MySqlConnection connection = new(connectionString);
+
     static void Main(string[] args)
     {
-        allContacts = RetrieveData();
         HomePage();
-        SaveToFile(allContacts);
         Console.Write("\n\n\n Good Bye!");
     }
 
-    static List<Contact> allContacts = new();
 
     static void Pause()
     {
@@ -48,6 +50,7 @@ class Program
     static void DeleteAllPage()
     {
         ClearScreen();
+        var allContacts = RetrieveData(connection);
         Console.WriteLine("Delete all?" + "\n");
         if (allContacts.Count > 0)
         {
@@ -73,6 +76,7 @@ class Program
 
     public static void ViewAllContactsPage()
     {
+        var allContacts = RetrieveData(connection);
         ClearScreen();
         Console.Write("All contacts list \n\n");
         if (allContacts.Count == 0)
@@ -103,6 +107,8 @@ class Program
         newContact.address = GetLine("Enter Address: ");
         Console.WriteLine();
 
+        var allContacts = RetrieveData(connection);
+
         bool isUsed = false;
         foreach (Contact c in allContacts)
         {
@@ -130,6 +136,7 @@ class Program
         Console.Write("Find a contact\n\n");
         string name = "";
         List<Contact> contactsFound = new();
+        var allContacts = RetrieveData(connection);
 
         name = GetLine("Enter name: ");
         Console.WriteLine();
@@ -167,6 +174,8 @@ class Program
         List<int> indexes = new();
         int index = 0;
         name = GetLine("Enter name: ");
+        var allContacts = RetrieveData(connection);
+
         foreach (Contact c in allContacts)
         {
             if (c.name == name)

@@ -1,5 +1,6 @@
 namespace DBMS_Phonebook;
 using System;
+using MySql.Data.MySqlClient;
 using static Utils;
 
 
@@ -20,39 +21,35 @@ public static class FileSave
         }
     }
 
-    public static List<Contact> RetrieveData()
+    public static List<Contact> RetrieveData(MySqlConnection connection)
     {
         List<Contact> allContacts = new();
-        if (!File.Exists("contacts_save.txt"))
+        using (connection)
         {
-            return allContacts;
-        }
-        string t = File.ReadAllText("contacts_save.txt");
-        int index = 0;
-        foreach (string line in t.Split("\n"))
-        {
-            Contact contact = new();
-            // cout << t << " " << index << endl;
-            switch (index)
+            try
             {
-                case 0:
-                    contact.name = t;
-                    break;
-                case 1:
-                    contact.number = t;
-                    break;
-                case 2:
-                    contact.address = t;
-                    break;
-            }
-            if (index + 1 == 3)
-            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT * FROM contact";
+                var reader = command.ExecuteReader();
 
-                allContacts.Add(contact);
+                while (reader.Read())
+                {
+                    Contact c = new()
+                    {
+                        name = reader["name"].ToString()!,
+                        number = reader["number"].ToString()!,
+                        address = reader["address"].ToString()!
+                    };
+                    allContacts.Add(c);
+                }
+
+
+
             }
-            if (!IsEmpty(t))
+            catch (Exception er)
             {
-                index = (index + 1) % 3;
+                Console.WriteLine("Error connecting to database." + er.Message);
             }
         }
         return allContacts;
