@@ -109,9 +109,10 @@ class Program
         newContact.name = GetLine("Enter name: ");
         newContact.number = GetLine("Enter Number: ", IsNotValidPhoneNumber);
         newContact.address = GetLine("Enter Address: ");
-        Console.WriteLine();
+        Console.WriteLine("\nAdding to database....");
 
         newContact.TrimMembers();
+
         using (connection)
         {
             try
