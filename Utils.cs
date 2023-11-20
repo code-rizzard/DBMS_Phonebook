@@ -15,6 +15,7 @@ static class Utils
         {
             if (Console.KeyAvailable)
             {
+                Console.ReadKey(true);
                 Console.Write(h.Substring(index));
                 break;
             }
