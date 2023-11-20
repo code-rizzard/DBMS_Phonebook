@@ -107,24 +107,26 @@ class Program
         newContact.address = GetLine("Enter Address: ");
         Console.WriteLine();
 
-        var allContacts = RetrieveData(connection);
-
-        bool isUsed = false;
-        foreach (Contact c in allContacts)
+        newContact.TrimMembers();
+        using (connection)
         {
-            if (c.number == newContact.number)
+            try
             {
-                ACout("Contact number is already in used.");
-                isUsed = true;
-                break;
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "INSERT INTO contact (name, number, address) VALUES (@name, @number, @address)";
+                command.Parameters.AddWithValue("@name", newContact.name);
+                command.Parameters.AddWithValue("@number", newContact.number);
+                command.Parameters.AddWithValue("@address", newContact.address);
+                command.ExecuteNonQuery();
+            }
+            catch (MySqlException)
+            {
+                Console.WriteLine($"Error inserting contact. Number: ({newContact.number}) already in used. ");
+                HomePage();
             }
         }
-        if (!isUsed)
-        {
-            newContact.TrimMembers();
-            allContacts.Add(newContact);
-            Console.WriteLine("Added sucessfully!");
-        }
+        Console.WriteLine("Added sucessfully!");
 
         Pause();
         HomePage();
