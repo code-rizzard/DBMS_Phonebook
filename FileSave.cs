@@ -83,6 +83,37 @@ public static class FileSave
 
     }
 
+    public static List<Contact> GetHistory(MySqlConnection connection)
+    {
+        List<Contact> contactsFound = new();
+        using (connection)
+        {
+            try
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT * FROM contact WHERE dateArchived IS NOT NULL ORDER BY dateArchived DESC";
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Contact c = new()
+                    {
+                        id = (int)reader["id"],
+                        name = reader["name"].ToString()!,
+                        number = reader["number"].ToString()!,
+                        address = reader["address"].ToString()!
+                    };
+                    contactsFound.Add(c);
+                }
+            }
+            catch (System.Exception err)
+            {
+                Console.WriteLine(err);
+            }
+        }
+        return contactsFound;
+    }
+
     public static List<Contact> RetrieveData(MySqlConnection connection)
     {
         List<Contact> allContacts = new();

@@ -29,7 +29,7 @@ class Program
         {
             int a = InteractiveInput(
             "PhoneBook \n \nWhat would you like to do?",
-            new string[] { "View All Contacts", "Find contact", "Add Contact", "Archive a Contact", "Archive All", "Quit" });
+            new string[] { "View All Contacts", "Find contact", "Add Contact", "Archive a Contact", "Archive All", "Show History", "Quit" });
             switch (a)
             {
                 case 0:
@@ -46,6 +46,9 @@ class Program
                     break;
                 case 4:
                     ArchiveAllPage();
+                    break;
+                case 5:
+                    ShowHistoryPage();
                     break;
                 default:
                     loop = false;
@@ -75,6 +78,29 @@ class Program
         else
         {
             ACout("No contacts to archive!");
+        }
+        Pause();
+    }
+
+    public static void ShowHistoryPage()
+    {
+        ClearScreen();
+        Console.Write("Show History\n\n");
+        var allContacts = GetHistory(connection);
+        if (allContacts.Count == 0)
+        {
+            ACout("Empty.... :( \n");
+        }
+        else
+        {
+            int index = 0;
+            foreach (Contact h in allContacts)
+            {
+                Console.Write(index + 1 + ".) ");
+                Console.Write(h);
+                index++;
+                Thread.Sleep(70);
+            }
         }
         Pause();
     }
