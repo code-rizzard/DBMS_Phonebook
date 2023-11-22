@@ -40,6 +40,23 @@ public static class FileSave
         }
     }
 
+    public static void ArchiveAll(MySqlConnection connection)
+    {
+        using (connection)
+        {
+            try
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "UPDATE contact SET dateArchived = NOW() WHERE dateArchived IS NULL";
+                command.ExecuteNonQuery();
+            }
+            catch (System.Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+        }
+    }
     public static List<Contact> GetContact(MySqlConnection connection, string name)
     {
         List<Contact> contactsFound = new();

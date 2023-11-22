@@ -45,7 +45,7 @@ class Program
                     ArchiveContactPage();
                     break;
                 case 4:
-                    DeleteAllPage();
+                    ArchiveAllPage();
                     break;
                 default:
                     loop = false;
@@ -53,28 +53,28 @@ class Program
             }
         } while (loop);
     }
-    static void DeleteAllPage()
+    static void ArchiveAllPage()
     {
         ClearScreen();
         var allContacts = RetrieveData(connection);
-        Console.WriteLine("Delete all?" + "\n");
+        Console.WriteLine("Archive all?" + "\n");
         if (allContacts.Count > 0)
         {
-            int res = InteractiveInput("Are you sure you want to delete everything?", new string[] { "No", "Yes" });
+            int res = InteractiveInput("Are you sure you want to archive everything?", new string[] { "No", "Yes" });
             Console.WriteLine("\n");
             if (res == 1)
             {
-                allContacts.Clear();
-                ACout("Deletion succesfull!");
+                ArchiveAll(connection);
+                ACout("Archive succesfull!");
             }
             else
             {
-                ACout("Deletion aborted.");
+                ACout("Archive aborted.");
             }
         }
         else
         {
-            ACout("No contacts to delete!");
+            ACout("No contacts to archive!");
         }
         Pause();
     }
@@ -233,8 +233,8 @@ class Program
                                 if (res1 == 1)
                                 {
                                     ArchiveContact(connection, n.id);
+                                    ACout("Contact archived!");
                                     Console.WriteLine();
-                                    ACout("Contact Archived!");
                                 }
                                 break;
                         }
