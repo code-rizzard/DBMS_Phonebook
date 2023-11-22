@@ -24,6 +24,12 @@ static class Utils
             Thread.Sleep(delay);
         }
     }
+
+    public static void Pause()
+    {
+        Console.WriteLine("\n\nPress any key to continue...");
+        Console.ReadKey();
+    }
     public static int InteractiveInput(string label, string[] choices, string endLabel = "Press ENTER/SPACE to select. Arrow keys to move. \n")
     {
         int _index = 0;

@@ -16,12 +16,6 @@ class Program
     }
 
 
-    static void Pause()
-    {
-        Console.WriteLine("\n\nPress any key to continue...");
-        Console.ReadKey();
-    }
-
     static void HomePage()
     {
         bool loop = true;
