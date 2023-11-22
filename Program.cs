@@ -92,6 +92,7 @@ class Program
             {
                 Console.Write(index + 1 + ".) ");
                 Console.Write(h);
+                Console.WriteLine("--------------------------");
                 index++;
                 Thread.Sleep(70);
             }
@@ -114,6 +115,7 @@ class Program
         {
             Console.Write(index + 1 + ".) ");
             Console.Write(h);
+            Console.WriteLine("--------------------------");
             index++;
             Thread.Sleep(70);
         }
