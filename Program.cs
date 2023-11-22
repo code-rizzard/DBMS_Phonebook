@@ -105,10 +105,12 @@ class Program
     {
         ClearScreen();
         Console.Write("Create a new contact\n\n");
-        Contact newContact;
-        newContact.name = GetLine("Enter name: ");
-        newContact.number = GetLine("Enter Number: ", IsNotValidPhoneNumber);
-        newContact.address = GetLine("Enter Address: ");
+        Contact newContact = new()
+        {
+            name = GetLine("Enter name: "),
+            number = GetLine("Enter Number: ", IsNotValidPhoneNumber),
+            address = GetLine("Enter Address: ")
+        };
         Console.WriteLine("\nAdding to database....");
 
         newContact.TrimMembers();
@@ -176,67 +178,70 @@ class Program
         Console.Write("Archive a contact\n\n");
         string name = GetLine("Enter name: ");
         List<Contact> contactsFound = new();
-        List<int> indexes = new();
-        int index = 0;
-        var allContacts = RetrieveData(connection);
-
-        foreach (Contact c in allContacts)
+        try
         {
-            if (c.name == name)
-            {
-                contactsFound.Add(c);
-                indexes.Add(index);
-            }
-            index++;
+            contactsFound = GetContact(connection, name);
+        }
+        catch (Exception err)
+        {
+            Console.WriteLine(err.Message);
+            Console.ReadKey();
         }
 
-        if (contactsFound.Count > 0)
+        if (contactsFound.Count <= 0)
         {
-            if (contactsFound.Count == 1)
-            {
-                Contact n = contactsFound[0];
-                Console.WriteLine(n);
-                int res = InteractiveInput(
-                    "Are you sure you want to archive? \n\n" + n,
-                    new string[] { "Back", "Archive" });
-                if (res == 1)
-                {
-                    allContacts.RemoveAt(indexes.First());
-                    ACout("Contact archived!");
-                }
-            }
-            else
-            {
-                List<string> choices = new() { "Back" };
-                foreach (Contact c in contactsFound)
-                {
-                    choices.Add(c.ToString());
-                }
-
-                int res = InteractiveInput("Select contact to archived: ", choices.ToArray());
-                switch (res)
-                {
-                    case 0:
-                        break;
-                    default:
-                        Contact n = contactsFound[res - 1];
-                        Console.Write(n);
-                        int res1 = InteractiveInput(
-                            "Are you sure you want to archive? \n\n" + n, new string[]
-                            {"Back", "Archive"});
-                        if (res1 == 1)
-                        {
-                            allContacts.RemoveAt(res);
-                            Console.WriteLine();
-                            ACout("Contact Archived!");
-                        }
-                        break;
-                }
-            }
+            ACout("No contact found with the name. :(");
         }
         else
         {
-            ACout("No contact found with the name. :(");
+            switch (contactsFound.Count)
+            {
+                case 1:
+                    {
+                        Contact n = contactsFound[0];
+                        Console.WriteLine(n);
+                        int res = InteractiveInput(
+                            "Are you sure you want to archive? \n\n" + n,
+                            new string[] { "Back", "Archive" });
+                        if (res == 1)
+                        {
+                            ArchiveContact(connection, n.id);
+                            ACout("Contact archived!");
+                        }
+
+                        break;
+                    }
+                default:
+                    {
+                        List<string> choices = new() { "Back" };
+                        foreach (Contact c in contactsFound)
+                        {
+                            choices.Add(c.ToString());
+                        }
+
+                        int res = InteractiveInput("Select contact to archived: ", choices.ToArray());
+                        switch (res)
+                        {
+                            case 0:
+                                break;
+                            default:
+                                Contact n = contactsFound[res - 1];
+                                Console.Write(n);
+                                int res1 = InteractiveInput(
+                                    "Are you sure you want to archive? \n\n" + n, new string[]
+                                    {"Back", "Archive"});
+                                if (res1 == 1)
+                                {
+                                    ArchiveContact(connection, n.id);
+                                    Console.WriteLine();
+                                    ACout("Contact Archived!");
+                                }
+                                break;
+                        }
+
+                        break;
+                    }
+            }
         }
 
         Console.ReadKey();

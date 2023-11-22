@@ -21,6 +21,51 @@ public static class FileSave
         }
     }
 
+    public static void ArchiveContact(MySqlConnection connection, int id)
+    {
+        using (connection)
+        {
+            try
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "UPDATE contact SET dateArchived = NOW() WHERE id = @id";
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
+            }
+            catch (System.Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+        }
+    }
+
+    public static List<Contact> GetContact(MySqlConnection connection, string name)
+    {
+        List<Contact> contactsFound = new();
+        using (connection)
+        {
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM contact WHERE name = @name AND dateArchived IS NULL";
+            command.Parameters.AddWithValue("@name", name);
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                Contact c = new()
+                {
+                    id = (int)reader["id"],
+                    name = reader["name"].ToString()!,
+                    number = reader["number"].ToString()!,
+                    address = reader["address"].ToString()!
+                };
+                contactsFound.Add(c);
+            }
+        }
+        return contactsFound;
+
+    }
+
     public static List<Contact> RetrieveData(MySqlConnection connection)
     {
         List<Contact> allContacts = new();
@@ -30,13 +75,14 @@ public static class FileSave
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM contact";
+                command.CommandText = "SELECT * FROM contact WHERE dateArchived IS NULL";
                 var reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
                     Contact c = new()
                     {
+                        id = (int)reader["id"],
                         name = reader["name"].ToString()!,
                         number = reader["number"].ToString()!,
                         address = reader["address"].ToString()!

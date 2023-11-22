@@ -154,15 +154,17 @@ static class Utils
 
 public struct Contact
 {
+    public int id;
     public string number;
     public string name;
     public string address;
 
-    public Contact(string number, string name, string address)
+    public Contact(string number, string name, string address, int id)
     {
         this.number = number;
         this.name = name;
         this.address = address;
+        this.id = id;
     }
 
     public override string ToString()
