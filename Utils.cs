@@ -1,5 +1,6 @@
 namespace DBMS_Phonebook;
 using System;
+
 static class Utils
 {
 
@@ -45,6 +46,7 @@ static class Utils
             if (_index == choiceIndex)
             {
                 Console.Write("=>");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
             }
             else
             {
@@ -54,6 +56,7 @@ static class Utils
 
             Console.Write("\n");
             choiceIndex++;
+            Console.ForegroundColor = ConsoleColor.White;
             Thread.Sleep(75);
         }
         ACout("\n" + endLabel);
@@ -68,6 +71,8 @@ static class Utils
                 if (_index == choiceIndex)
                 {
                     Console.Write("=>");
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+
                 }
                 else
                 {
@@ -76,6 +81,8 @@ static class Utils
                 Console.Write(h);
                 Console.Write("\n");
                 choiceIndex++;
+                Console.ForegroundColor = ConsoleColor.White;
+
             }
             Console.Write("\n" + endLabel);
 
