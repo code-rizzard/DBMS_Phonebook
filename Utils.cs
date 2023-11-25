@@ -44,20 +44,20 @@ static class Utils
         Thread.Sleep(75);
         foreach (string h in choices)
         {
+            var s = "";
             if (_index == choiceIndex)
             {
-                Console.Write("=>");
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                s += "[green]=>";
             }
             else
             {
-                Console.Write("  ");
+                s += "  [default]";
             }
-            Console.Write(h);
+            s += h + "[/]";
 
+            AnsiConsole.Markup(s);
             Console.Write("\n");
             choiceIndex++;
-            Console.ForegroundColor = ConsoleColor.White;
             Thread.Sleep(75);
         }
         ACout("\n" + endLabel);
@@ -66,24 +66,22 @@ static class Utils
             choiceIndex = 0;
             ClearScreen();
             Console.WriteLine(label + "\n");
-
             foreach (string h in choices)
             {
+                var s = "";
                 if (_index == choiceIndex)
                 {
-                    Console.Write("=>");
-                    Console.ForegroundColor = ConsoleColor.DarkGreen;
-
+                    s += "[green]=>";
                 }
                 else
                 {
-                    Console.Write("  ");
+                    s += "  [default]";
                 }
-                Console.Write(h);
+                s += h + "[/]";
+
+                AnsiConsole.Markup(s);
                 Console.Write("\n");
                 choiceIndex++;
-                Console.ForegroundColor = ConsoleColor.White;
-
             }
             Console.Write("\n" + endLabel);
 
