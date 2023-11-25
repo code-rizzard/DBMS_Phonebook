@@ -172,12 +172,15 @@ public struct Contact
     public string name;
     public string address;
 
-    public Contact(string number, string name, string address, int id)
+    public string? dateArchived;
+
+    public Contact(string number, string name, string address, int id, string? archivedAt = null)
     {
         this.number = number;
         this.name = name;
         this.address = address;
         this.id = id;
+        this.dateArchived = archivedAt;
     }
 
     public override string ToString()

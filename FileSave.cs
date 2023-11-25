@@ -101,7 +101,8 @@ public static class FileSave
                         id = (int)reader["id"],
                         name = reader["name"].ToString()!,
                         number = reader["number"].ToString()!,
-                        address = reader["address"].ToString()!
+                        address = reader["address"].ToString()!,
+                        dateArchived = reader["dateArchived"].ToString()!
                     };
                     contactsFound.Add(c);
                 }

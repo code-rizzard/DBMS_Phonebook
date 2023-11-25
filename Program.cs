@@ -79,7 +79,7 @@ class Program
     public static void ShowHistoryPage()
     {
         ClearScreen();
-        AnsiConsole.Markup("Show History\n\n");
+        AnsiConsole.Markup("Archived History\n\n");
         var allContacts = GetHistory(connection);
         if (allContacts.Count == 0)
         {
@@ -87,15 +87,12 @@ class Program
         }
         else
         {
-            int index = 0;
+            var table = new Table().AddColumns("Date Archived", "Name", "Number", "Address");
             foreach (Contact h in allContacts)
             {
-                AnsiConsole.Markup(index + 1 + ".) ");
-                AnsiConsole.Markup(h.ToString());
-                AnsiConsole.MarkupLine("--------------------------");
-                index++;
-                Thread.Sleep(70);
+                table.AddRow(h.dateArchived!, h.name, h.number, h.address);
             }
+            AnsiConsole.Write(table);
         }
         Pause();
     }
@@ -111,8 +108,8 @@ class Program
         }
         allContacts.Sort((x, y) => x.name.CompareTo(y.name));
         int index = 0;
-        var table = new Table();
-        table.AddColumns("Index", "Name", "Number", "Address");
+        // AnsiConsole.MarkupLine(c.ToString());
+        var table = new Table().AddColumns("Index", "Name", "Number", "Address");
         foreach (Contact h in allContacts)
         {
             AnsiConsole.Clear();
@@ -181,11 +178,13 @@ class Program
 
         if (contactsFound.Count > 0)
         {
+            var table = new Table().AddColumns("Index", "Name", "Number", "Address");
             AnsiConsole.Markup("Here are the contacts with the name: " + name + "\n\n");
             foreach (Contact c in contactsFound)
             {
-                AnsiConsole.MarkupLine(c.ToString());
+                table.AddRow(c.name, c.number, c.address);
             }
+            AnsiConsole.Write(table);
         }
         else
         {
