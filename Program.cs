@@ -177,7 +177,7 @@ class Program
 
         if (contactsFound.Count > 0)
         {
-            var table = CreateContactTable();
+            var table = CreateContactTable("Name", "Number", "Address");
             AnsiConsole.Markup("Here are the contacts with the name: " + name + "\n\n");
             foreach (Contact c in contactsFound)
             {
