@@ -6,7 +6,7 @@ using MySql.Data.MySqlClient;
 
 class Program
 {
-    public const string connectionString = "server=localhost;port=3306;uid=root;pwd=password123;database=phonebook;";
+    public const string connectionString = "server=localhost;port=3306;uid=root;database=phonebook;";
     static readonly MySqlConnection connection = new(connectionString);
 
     static void Main(string[] args)
