@@ -2,7 +2,7 @@
 using static FileSave;
 using static Utils;
 using MySql.Data.MySqlClient;
-
+using Spectre.Console;
 
 class Program
 {
@@ -12,7 +12,7 @@ class Program
     static void Main(string[] args)
     {
         HomePage();
-        Console.Write("\n\n\n Good Bye!");
+        AnsiConsole.Markup("\n\n\n Good Bye!");
     }
 
 
@@ -54,11 +54,11 @@ class Program
     {
         ClearScreen();
         var allContacts = RetrieveData(connection);
-        Console.WriteLine("Archive all?" + "\n");
+        AnsiConsole.MarkupLine("Archive all?" + "\n");
         if (allContacts.Count > 0)
         {
             int res = InteractiveInput("Are you sure you want to archive everything?", new string[] { "No", "Yes" });
-            Console.WriteLine("\n");
+            AnsiConsole.MarkupLine("\n");
             if (res == 1)
             {
                 ArchiveAll(connection);
@@ -79,7 +79,7 @@ class Program
     public static void ShowHistoryPage()
     {
         ClearScreen();
-        Console.Write("Show History\n\n");
+        AnsiConsole.Markup("Show History\n\n");
         var allContacts = GetHistory(connection);
         if (allContacts.Count == 0)
         {
@@ -90,9 +90,9 @@ class Program
             int index = 0;
             foreach (Contact h in allContacts)
             {
-                Console.Write(index + 1 + ".) ");
-                Console.Write(h);
-                Console.WriteLine("--------------------------");
+                AnsiConsole.Markup(index + 1 + ".) ");
+                AnsiConsole.Markup(h.ToString());
+                AnsiConsole.MarkupLine("--------------------------");
                 index++;
                 Thread.Sleep(70);
             }
@@ -104,7 +104,7 @@ class Program
     {
         var allContacts = RetrieveData(connection);
         ClearScreen();
-        Console.Write("All contacts list \n\n");
+        AnsiConsole.Markup("All contacts list \n\n");
         if (allContacts.Count == 0)
         {
             ACout("No contacts to show :( \n");
@@ -113,9 +113,9 @@ class Program
         int index = 0;
         foreach (Contact h in allContacts)
         {
-            Console.Write(index + 1 + ".) ");
-            Console.Write(h);
-            Console.WriteLine("--------------------------");
+            AnsiConsole.Markup(index + 1 + ".) ");
+            AnsiConsole.Markup(h.ToString());
+            AnsiConsole.MarkupLine("--------------------------");
             index++;
             Thread.Sleep(70);
         }
@@ -126,14 +126,14 @@ class Program
     public static void AddContactPage()
     {
         ClearScreen();
-        Console.Write("Create a new contact\n\n");
+        AnsiConsole.Markup("Create a new contact\n\n");
         Contact newContact = new()
         {
             name = GetLine("Enter name: "),
             number = GetLine("Enter Number: ", IsNotValidPhoneNumber),
             address = GetLine("Enter Address: ")
         };
-        Console.WriteLine("\nAdding to database....");
+        AnsiConsole.MarkupLine("\nAdding to database....");
 
         newContact.TrimMembers();
 
@@ -151,11 +151,11 @@ class Program
             }
             catch (MySqlException)
             {
-                Console.WriteLine($"Error inserting contact. Number: ({newContact.number}) already in used. ");
+                AnsiConsole.MarkupLine($"Error inserting contact. Number: ({newContact.number}) already in used. ");
                 HomePage();
             }
         }
-        Console.WriteLine("Added sucessfully!");
+        AnsiConsole.MarkupLine("Added sucessfully!");
 
         Pause();
     }
@@ -163,7 +163,7 @@ class Program
     public static void FindContactPage()
     {
         ClearScreen();
-        Console.Write("Find a contact\n\n");
+        AnsiConsole.Markup("Find a contact\n\n");
         string name = "";
         List<Contact> contactsFound = new();
         var allContacts = RetrieveData(connection);
@@ -180,10 +180,10 @@ class Program
 
         if (contactsFound.Count > 0)
         {
-            Console.Write("Here are the contacts with the name: " + name + "\n\n");
+            AnsiConsole.Markup("Here are the contacts with the name: " + name + "\n\n");
             foreach (Contact c in contactsFound)
             {
-                Console.WriteLine(c);
+                AnsiConsole.MarkupLine(c.ToString());
             }
         }
         else
@@ -197,7 +197,7 @@ class Program
     public static void ArchiveContactPage()
     {
         ClearScreen();
-        Console.Write("Archive a contact\n\n");
+        AnsiConsole.Markup("Archive a contact\n\n");
         string name = GetLine("Enter name: ");
         List<Contact> contactsFound = new();
         try
@@ -206,7 +206,7 @@ class Program
         }
         catch (Exception err)
         {
-            Console.WriteLine(err.Message);
+            AnsiConsole.MarkupLine(err.Message);
             Console.ReadKey();
         }
 
@@ -221,7 +221,7 @@ class Program
                 case 1:
                     {
                         Contact n = contactsFound[0];
-                        Console.WriteLine(n);
+                        AnsiConsole.MarkupLine(n.ToString());
                         int res = InteractiveInput(
                             "Are you sure you want to archive? \n\n" + n,
                             new string[] { "Back", "Archive" });
@@ -248,7 +248,7 @@ class Program
                                 break;
                             default:
                                 Contact n = contactsFound[res - 1];
-                                Console.Write(n);
+                                AnsiConsole.Markup(n.ToString());
                                 int res1 = InteractiveInput(
                                     "Are you sure you want to archive? \n\n" + n, new string[]
                                     {"Back", "Archive"});
