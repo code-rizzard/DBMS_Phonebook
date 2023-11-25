@@ -1,5 +1,6 @@
 namespace DBMS_Phonebook;
 using System;
+using Spectre.Console;
 
 static class Utils
 {
@@ -159,7 +160,7 @@ static class Utils
         return !IsValidPhoneNumber(phoneNumber);
     }
 
-
+    public static Table CreateContactTable(params string[] columns) => new Table().AddColumns(columns.Length > 0 ? columns : new string[] { "Index", "Name", "Number", "Address" });
 
 
 

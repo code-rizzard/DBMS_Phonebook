@@ -108,8 +108,7 @@ class Program
         }
         allContacts.Sort((x, y) => x.name.CompareTo(y.name));
         int index = 0;
-        // AnsiConsole.MarkupLine(c.ToString());
-        var table = new Table().AddColumns("Index", "Name", "Number", "Address");
+        var table = CreateContactTable();
         foreach (Contact h in allContacts)
         {
             AnsiConsole.Clear();
@@ -178,7 +177,7 @@ class Program
 
         if (contactsFound.Count > 0)
         {
-            var table = new Table().AddColumns("Index", "Name", "Number", "Address");
+            var table = CreateContactTable();
             AnsiConsole.Markup("Here are the contacts with the name: " + name + "\n\n");
             foreach (Contact c in contactsFound)
             {
