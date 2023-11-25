@@ -111,15 +111,16 @@ class Program
         }
         allContacts.Sort((x, y) => x.name.CompareTo(y.name));
         int index = 0;
+        var table = new Table();
+        table.AddColumns("Index", "Name", "Number", "Address");
         foreach (Contact h in allContacts)
         {
-            AnsiConsole.Markup(index + 1 + ".) ");
-            AnsiConsole.Markup(h.ToString());
-            AnsiConsole.MarkupLine("--------------------------");
+            AnsiConsole.Clear();
+            table.AddRow((index + 1).ToString(), h.name, h.number, h.address);
             index++;
+            AnsiConsole.Write(table);
             Thread.Sleep(70);
         }
-
         Pause();
     }
 
