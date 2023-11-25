@@ -11,6 +11,29 @@ class Program
 
     static void Main(string[] args)
     {
+        Exception? error = null;
+        AnsiConsole.Status().Start("Connecting to database...", (ctx) =>
+        {
+            try
+            {
+                using (connection)
+                {
+                    connection.Open();
+                }
+            }
+            catch (Exception err)
+            {
+                error = err;
+            }
+        });
+        if (error != null)
+        {
+            AnsiConsole.MarkupLine("[red]Error connecting to database. Please check your connection settings.[/]");
+            AnsiConsole.MarkupLine("[red]" + error.Message + "[/]");
+            AnsiConsole.MarkupLine("\n\nContinuing without database connection may create unexpected events.");
+            Console.ReadKey();
+        }
+
         HomePage();
         AnsiConsole.Markup("\n\n\n Good Bye!");
     }
