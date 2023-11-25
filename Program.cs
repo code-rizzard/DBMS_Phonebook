@@ -54,7 +54,7 @@ class Program
     {
         ClearScreen();
         var allContacts = RetrieveData(connection);
-        AnsiConsole.MarkupLine("Archive all?" + "\n");
+        AnsiConsole.MarkupLine("[red]Archive all?[/]" + "\n");
         if (allContacts.Count > 0)
         {
             int res = InteractiveInput("Are you sure you want to archive everything?", new string[] { "No", "Yes" });
@@ -126,9 +126,9 @@ class Program
         AnsiConsole.Markup("Create a new contact\n\n");
         Contact newContact = new()
         {
-            name = GetLine("Enter name: "),
-            number = GetLine("Enter Number: ", IsNotValidPhoneNumber),
-            address = GetLine("Enter Address: ")
+            name = AnsiConsole.Ask<string>("[green]Enter name: [/]"),
+            number = AnsiConsole.Prompt(new TextPrompt<string>("[green]Enter Number: [/]").ValidationErrorMessage("[red]Invalid phone number.[/]").Validate(IsValidPhoneNumber)),
+            address = AnsiConsole.Ask<string>("[green]Enter Address: [/]")
         };
         AnsiConsole.MarkupLine("\nAdding to database....");
 
@@ -152,7 +152,7 @@ class Program
                 HomePage();
             }
         }
-        AnsiConsole.MarkupLine("Added sucessfully!");
+        AnsiConsole.MarkupLine("[green]Added sucessfully![/]");
 
         Pause();
     }
@@ -164,8 +164,7 @@ class Program
         string name = "";
         List<Contact> contactsFound = new();
         var allContacts = RetrieveData(connection);
-
-        name = GetLine("Enter name: ");
+        name = AnsiConsole.Ask<string>("[green]Enter name: [/]");
         Console.WriteLine();
         foreach (Contact c in allContacts)
         {
@@ -197,7 +196,7 @@ class Program
     {
         ClearScreen();
         AnsiConsole.Markup("Archive a contact\n\n");
-        string name = GetLine("Enter name: ");
+        string name = AnsiConsole.Ask<string>("Enter name: ");
         List<Contact> contactsFound = new();
         try
         {
